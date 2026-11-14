@@ -1,4 +1,5 @@
 import UIKit
+import LocalAuthentication
 
 class MainViewController: UIViewController {
     @IBOutlet weak var usernameTextField: UITextField!
@@ -21,11 +22,51 @@ class MainViewController: UIViewController {
 
         if viewModel.validateUser(user: user) {
             print("Login válido")
+            UserDefaults.standard.set(username, forKey: "username")
             performSegue(withIdentifier: "showHome", sender: self)
         } else {
             print("Completa todos los campos")
         }
     }
+    
+    @IBAction func faceIDTapped(_ sender: UIButton) {
+
+        let context = LAContext()
+        var error: NSError?
+
+        if context.canEvaluatePolicy(
+            .deviceOwnerAuthenticationWithBiometrics,
+            error: &error
+        ) {
+
+            context.evaluatePolicy(
+                .deviceOwnerAuthenticationWithBiometrics,
+                localizedReason: "Confirma tu identidad para iniciar sesión"
+            ) { success, error in
+
+                DispatchQueue.main.async {
+
+                    if success {
+                        print("Face ID correcto")
+
+                        self.performSegue(
+                            withIdentifier: "showHome",
+                            sender: self
+                        )
+
+                    } else {
+                        print("Face ID no reconocido")
+                    }
+                }
+            }
+
+        } else {
+            print("Autenticación biométrica no disponible")
+            print("Error: \(error?.localizedDescription ?? "Desconocido")")
+            print("Código del error: \(error?.code ?? -1)")
+        }
+    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()

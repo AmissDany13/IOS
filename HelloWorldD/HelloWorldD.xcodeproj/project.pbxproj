@@ -147,6 +147,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = HelloWorldD/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Esta aplicación necesita acceso a la cámara para tomar fotografías de perfil.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Necesitamos FaceID";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Esta aplicación necesita acceder a tus fotografías para seleccionar una imagen de perfil.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -174,6 +177,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = HelloWorldD/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Esta aplicación necesita acceso a la cámara para tomar fotografías de perfil.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Necesitamos FaceID";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Esta aplicación necesita acceder a tus fotografías para seleccionar una imagen de perfil.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
