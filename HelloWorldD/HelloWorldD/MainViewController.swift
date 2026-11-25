@@ -13,6 +13,26 @@ class MainViewController: UIViewController {
 
         let username = usernameTextField.text ?? ""
         let password = passwordTextField.text ?? ""
+        let usuarioVacio = username.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let contrasenaVacia = password.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+
+        setErrorBorder(for: usernameTextField, show: usuarioVacio)
+        setErrorBorder(for: passwordTextField, show: contrasenaVacia)
+
+        if usuarioVacio || contrasenaVacia {
+
+            if usuarioVacio {
+                print("El campo Usuario está vacío")
+            }
+
+            if contrasenaVacia {
+                print("El campo Contraseña está vacío")
+            }
+
+            return
+        }
+
+
 
         let user = User(
             name: "",
@@ -30,7 +50,6 @@ class MainViewController: UIViewController {
     }
     
     @IBAction func faceIDTapped(_ sender: UIButton) {
-
         let context = LAContext()
         var error: NSError?
 
@@ -66,6 +85,18 @@ class MainViewController: UIViewController {
             print("Código del error: \(error?.code ?? -1)")
         }
     }
+    
+    
+    func setErrorBorder(for textField: UITextField, show: Bool) {
+        if show {
+            textField.layer.borderColor = UIColor.red.cgColor
+            textField.layer.borderWidth = 1.0
+        } else {
+            textField.layer.borderColor = UIColor.clear.cgColor
+            textField.layer.borderWidth = 0.0
+        }
+    }
+
 
     
     override func viewDidLoad() {
