@@ -34,3 +34,16 @@ jobs:
             -derivedDataPath build \
             CODE_SIGNING_ALLOWED=NO \
             build
+
+      - name: Comprimir aplicacion
+        run: |
+          cd build/Build/Products/Debug-iphonesimulator
+          ditto -c -k --keepParent HelloWorldD.app HelloWorldD.zip
+
+      - name: Exportar aplicacion
+        uses: actions/upload-artifact@v4
+        with:
+          name: HelloWorldD-iOS
+          path: build/Build/Products/Debug-iphonesimulator/HelloWorldD.zip
+          if-no-files-found: error
+          retention-days: 7
