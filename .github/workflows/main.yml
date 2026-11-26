@@ -21,12 +21,12 @@ jobs:
       - name: Revisar proyecto
         run: |
           find . -name "*.xcodeproj"
-          xcodebuild -list -project HelloWorldD.xcodeproj
+          xcodebuild -list -project HelloWorldD/HelloWorldD.xcodeproj
 
       - name: Compilar aplicacion iOS
         run: |
           xcodebuild \
-            -project HelloWorldD.xcodeproj \
+            -project HelloWorldD/HelloWorldD.xcodeproj \
             -scheme HelloWorldD \
             -configuration Debug \
             -sdk iphonesimulator \
