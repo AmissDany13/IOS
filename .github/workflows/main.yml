@@ -2,14 +2,24 @@ name: Compilar HelloWorldD
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'HelloWorldD/**'
+      - '.github/workflows/main.yml'
 
 permissions:
   contents: read
 
+concurrency:
+  group: helloworldd-appetize
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: macos-15
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
       - name: Descargar proyecto
@@ -47,3 +57,22 @@ jobs:
           path: build/Build/Products/Debug-iphonesimulator/HelloWorldD.zip
           if-no-files-found: error
           retention-days: 7
+
+      - name: Verificar credenciales
+        env:
+          APPETIZE_API_TOKEN: ${{ secrets.APPETIZE_API_TOKEN }}
+          APPETIZE_PUBLIC_KEY: ${{ secrets.APPETIZE_PUBLIC_KEY }}
+        run: |
+          if [ -z "$APPETIZE_API_TOKEN" ] || [ -z "$APPETIZE_PUBLIC_KEY" ]; then
+            echo "Faltan los secretos de Appetize"
+            exit 1
+          fi
+
+      - name: Actualizar Appetize
+        uses: appetizeio/github-action-appetize@v1.1.0
+        with:
+          apiToken: ${{ secrets.APPETIZE_API_TOKEN }}
+          publicKey: ${{ secrets.APPETIZE_PUBLIC_KEY }}
+          appFile: build/Build/Products/Debug-iphonesimulator/HelloWorldD.zip
+          platform: ios
+          fileType: zip
