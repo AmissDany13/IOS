@@ -4,6 +4,7 @@ import LocalAuthentication
 class MainViewController: UIViewController {
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var welcomeLabel: UILabel!
     
     private let viewModel = UserViewModel()
     
@@ -41,6 +42,26 @@ class MainViewController: UIViewController {
         )
 
         if viewModel.validateUser(user: user) {
+            
+            // MARK: - Validar usuario registrado
+
+            // Recuperar las credenciales guardadas
+            let registeredUsername = UserDefaults.standard.string(
+                forKey: "registeredUsername"
+            )
+
+            let registeredPassword = UserDefaults.standard.string(
+                forKey: "registeredPassword"
+            )
+
+            // Comprobar que coincidan con los datos del Login
+            guard username == registeredUsername &&
+                  password == registeredPassword else {
+
+                print("Usuario o contraseña incorrectos")
+                return
+            }
+
             print("Login válido")
             UserDefaults.standard.set(username, forKey: "username")
             performSegue(withIdentifier: "showHome", sender: self)
@@ -50,6 +71,24 @@ class MainViewController: UIViewController {
     }
     
     @IBAction func faceIDTapped(_ sender: UIButton) {
+        
+        // MARK: - Verificar usuario antes de usar Face ID
+
+        // Recuperar el usuario guardado durante el registro
+        let registeredUsername = UserDefaults.standard.string(
+            forKey: "registeredUsername"
+        )
+
+        // No permitir Face ID si todavía no existe una cuenta
+        guard let registeredUsername = registeredUsername,
+              !registeredUsername.isEmpty else {
+
+            print("No existe un usuario registrado")
+            return
+        }
+
+        print("Usuario registrado encontrado: \(registeredUsername)")
+
         let context = LAContext()
         var error: NSError?
 
@@ -100,13 +139,42 @@ class MainViewController: UIViewController {
 
     
     override func viewDidLoad() {
+        
+        // MARK: - Recuperar datos del registro
+
+        // Leer los datos guardados con UserDefaults
+        let registeredName = UserDefaults.standard.string(
+            forKey: "registeredName"
+        ) ?? "Sin registrar"
+
+        let registeredUsername = UserDefaults.standard.string(
+            forKey: "registeredUsername"
+        ) ?? "Sin registrar"
+
+        // Mostrar los datos recuperados en la consola
+        print("Nombre registrado: \(registeredName)")
+        print("Usuario registrado: \(registeredUsername)")
+
         super.viewDidLoad()
         print("\(#function)")
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("\(#function)")
+        // MARK: - Mensaje de bienvenida
+        // Recuperar el nombre guardado durante el registro
+        let registeredName = UserDefaults.standard.string(
+            forKey: "registeredName"
+        ) ?? ""
+        // Mostrar el nombre si existe un usuario registrado
+        if registeredName.isEmpty {
+            welcomeLabel.text = "Bienvenido"
+        } else {
+            welcomeLabel.text = "Bienvenido, \(registeredName)"
+        }
     }
+
 
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
